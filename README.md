@@ -9,13 +9,13 @@ El objetivo principal es proporcionar a los vendedores una herramienta de alta c
 
 # 🚀 **Características Destacadas**
 
-Enfoque Offline-First: Las órdenes se generan localmente y se marcan como "borradores" si no hay conexión, asegurando que el flujo de venta nunca se detenga.
+**Enfoque Offline-First:** Las órdenes se generan localmente y se marcan como "borradores" si no hay conexión, asegurando que el flujo de venta nunca se detenga.
 
-Gestión Flexible de Clientes: Capacidad de consumir el listado maestro desde la API o crear pedidos para clientes casuales (registrando únicamente nombre y dirección), permitiendo una operación ágil en el punto de venta.
+**Gestión Flexible de Clientes:** Capacidad de consumir el listado maestro desde la API o crear pedidos para clientes casuales (registrando únicamente nombre y dirección), permitiendo una operación ágil en el punto de venta.
 
-Catálogo con Búsqueda Local: Sincronización de stock y catálogo para consultas instantáneas sin latencia de red.
+**Catálogo con Búsqueda Local:** Sincronización de stock y catálogo para consultas instantáneas sin latencia de red.
 
-Arquitectura Escalable: El proyecto está preparado para la implementación inminente de Role-Based Access Control (RBAC) y lógica de permisos diferenciada.
+**Arquitectura Escalable:** El proyecto está preparado para la implementación inminente de Role-Based Access Control (RBAC) y lógica de permisos diferenciada.
 
 # 🛠️ **Stack Tecnológico**
 
