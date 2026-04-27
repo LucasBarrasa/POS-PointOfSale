@@ -19,34 +19,34 @@ Arquitectura Escalable: El proyecto está preparado para la implementación inmi
 
 # 🛠️ **Stack Tecnológico**
 
-Lenguaje: Kotlin.
+**Lenguaje:** Kotlin.
 
-Arquitectura: Clean Architecture + MVVM (Model-View-ViewModel).
+**Arquitectura:** Clean Architecture + MVVM (Model-View-ViewModel).
 
-Modularización: Estructura por capas y features para facilitar el mantenimiento y el trabajo en equipo.
+**Modularización:** Estructura por capas y features para facilitar el mantenimiento y el trabajo en equipo.
 
-Persistencia Local: Room Database (Caché y Single Source of Truth).
+**Persistencia Local:** Room Database (Caché y Single Source of Truth).
 
-Networking: Retrofit + OkHttp para el consumo de la API REST de Chester.
+**Networking:** Retrofit + OkHttp para el consumo de la API REST de Chester.
 
-Testing: Unit Tests en la capa de modelos y casos de uso para asegurar la integridad de la lógica de negocio. JUnit 5 y Mock
+**Testing:** Unit Tests en la capa de modelos y casos de uso para asegurar la integridad de la lógica de negocio. junit5 y Mockk
 
 # 📂 **Estructura de Módulos**
 
-:core: Cimientos de la app (Data, Network, Models, Navigation).
+**:core:** Cimientos de la app (Data, Network, Models, Navigation).
 
-:features:create_order: Flujo completo de navegación para la toma de pedidos.
+**:features:createorder:** Flujo completo de navegación para la toma de pedidos.
 
-:features:order_detail: Gestión y revisión de órdenes existentes.
+**:features:orderdetail:** Gestión y revisión de órdenes existentes.
 
-:features:seller: Panel principal para el vendedor (Listados, catálogo y gestión rápida).
+**:features:seller:** Panel principal para el vendedor (Listados, catálogo y gestión rápida).
 
-:app: Orquestador principal que ensambla las piezas del sistema.
+**:app:** Orquestador principal que ensambla las piezas del sistema.
 
 # 🔜 **Roadmap de Desarrollo**
 
-[ ] Sincronización Inteligente: Implementación de WorkManager para el envío automático de pedidos en segundo plano cuando se recupere la conexión.
+[ ] **Sincronización Inteligente:** Implementación de WorkManager para el envío automático de pedidos en segundo plano cuando se recupere la conexión.
 
-[ ] Seguridad y Perfiles: Integración de autenticación y lógica de navegación basada en roles (Admin/Repartidor/Vendedor).
+[ ] **Seguridad y Perfiles:** Integración de autenticación y lógica de navegación basada en roles (Admin/Repartidor/Vendedor).
 
-[ ] Gestión de Pedidos: Funcionalidad de edición de órdenes enviadas y sincronización manual para usuarios avanzados.
+[ ] **Gestión de Pedidos:** Funcionalidad de edición de órdenes enviadas y sincronización manual para usuarios avanzados.
