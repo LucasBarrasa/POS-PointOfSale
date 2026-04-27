@@ -1,4 +1,4 @@
-# ** Chester POS - Android Portfolio Showcase **📱
+# **Chester POS - Android Portfolio** 📱
 
 Este repositorio es una vitrina técnica que muestra las funcionalidades centrales y la arquitectura de Chester App, una solución integral de gestión comercial. El proyecto nace de una colaboración activa con un desarrollador Backend para resolver la operativa de ventas en movilidad, permitiendo la gestión de catálogos, clientes y pedidos en tiempo real y offline.
 
