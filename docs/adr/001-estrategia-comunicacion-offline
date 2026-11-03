@@ -1,47 +1,43 @@
-Contexto
-ChesterApp requiere que los vendedores puedan registrar ventas y gestionar órdenes incluso en zonas sin cobertura de internet, con la excepción de acciones que requieren validación estricta en tiempo real como la validacion de la orden, stock y los pagos con Mercado Pago.
+# ADR 002: Estrategia de Comunicación Local/Remota (Offline-First)
 
-Decisión
-Se implementará el patrón Single Source of Truth (SSOT) utilizando Room Database como la única fuente de datos para la interfaz de usuario.
+## Contexto
+Los usuarios de la aplicación pueden encontrarse en zonas sin conexión a internet y necesitan registrar ventas de forma local[cite: 2, 6]. Las operaciones que dependen estrictamente de servicios externos, como la generación de códigos QR de cobro mediante la API de Mercado Pago, no podrán ejecutarse sin conexión[cite: 2, 5].
 
-Lectura Reactiva: La UI nunca consumirá datos directamente de la API REST. Se suscribirá a la base de datos local (Room) utilizando Kotlin Flows.
+## Decisión Técnica
+Se implementará el patrón de **Única Fuente de Verdad (Single Source of Truth)** centralizado en Room Database[cite: 2, 6]. 
 
-Escritura Optimista: Las acciones del usuario (ej. crear una orden) impactarán inmediatamente en Room con un estado temporal de sincronización (PENDING_CREATE).
+* **Lectura reactiva:** La interfaz de usuario nunca esperará respuestas de red directamente; leerá exclusivamente los datos desde Room mediante Kotlin Flows[cite: 6].
+* **Escritura optimista:** Cuando un usuario registre una venta, la aplicación guardará la orden primero en la base de datos local con un indicador temporal (`sync_status = PENDING`)[cite: 6].
+* **Sincronización asíncrona:** La aplicación utilizará Retrofit para consumir la API REST[cite: 6]. En caso de no tener internet, WorkManager interceptará la petición fallida y la reintentará automáticamente en segundo plano cuando el dispositivo recupere la conexión[cite: 6].
 
-Sincronización Asíncrona: Se utilizará WorkManager para observar los registros pendientes en Room y enviarlos al backend mediante Retrofit + OkHttp. Si la red falla, WorkManager retendrá la tarea y la reintentará automáticamente al recuperar la conexión.
+## Flujo de Datos
 
-
-  sequenceDiagram
+```mermaid
+sequenceDiagram
     autonumber
     actor Vendedor
     participant UI as UI (Jetpack Compose)
-    participant Repo as Repositorio (Domain)
     participant Room as Room DB (Local)
     participant WorkManager as WorkManager
     participant API as API REST (Backend)
 
-    Note over UI, Room: 1. Flujo de Lectura Constante (Single Source of Truth)
+    Note over UI, Room: 1. Lectura Reactiva (Single Source of Truth)
     Room-->>UI: Emite datos actualizados (Flow/StateFlow)
     
-    Note over Vendedor, WorkManager: 2. Flujo de Escritura Optimista
+    Note over Vendedor, WorkManager: 2. Escritura Optimista
     Vendedor->>UI: Crea nueva orden
-    UI->>Repo: registrarOrden(orden)
-    Repo->>Room: Guarda orden (syncStatus = PENDING_CREATE)
-    Room-->>UI: Actualiza UI instantáneamente (Flow)
-    Repo->>WorkManager: Encola tarea de sincronización
+    UI->>Room: Guarda orden (sync_status = PENDING)
+    Room-->>UI: Actualiza UI instantáneamente
+    UI->>WorkManager: Encola tarea de sincronización
     
-    Note over WorkManager, API: 3. Sincronización en Segundo Plano
+    Note over WorkManager, API: 3. Sincronización Asíncrona
     WorkManager->>API: POST /api/sales/orders/ (Retrofit)
     
     alt Sincronización Exitosa
-        API-->>WorkManager: 201 Created (remote_id)
-        WorkManager->>Room: Actualiza remote_id y syncStatus = SYNCED
+        API-->>WorkManager: 201 Created
+        WorkManager->>Room: Actualiza sync_status a SYNCED
         Room-->>UI: Emite actualización limpia a la UI
-    else Sin Internet / Error de Red
+    else Sin Internet
         API--xWorkManager: Falla conexión
-        WorkManager->>WorkManager: Reprograma reintento (Backoff)
-    else Error de Negocio (Ej. Sin Stock)
-        API-->>WorkManager: 400 Bad Request (Sin stock)
-        WorkManager->>Room: Actualiza estado a FAILED (isOutOfStockConflict = true)
-        Room-->>UI: Muestra producto tachado en la orden
+        WorkManager->>WorkManager: Reprograma reintento automático en segundo plano
     end
